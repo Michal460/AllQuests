@@ -42,9 +42,8 @@ void del(int x, std::string s) {
 	}
 	std::cout << "el founded" << std::endl;
 	//изменения не вступают в силу
-	Tlist* h2 = h1->prev;
-	h1 = h1->next;
-	h1->prev = h2;
+	h1->prev->next = h1->next;
+	h1->next->prev = h1->prev;
 	std::cout << "el edited" << std::endl;
 	//--------------
 }
