@@ -40,12 +40,8 @@ void del(int x, std::string s) {
 	while (h1->t.name != s && h1->t.electrific != x) {
 		h1 = h1->next;
 	}
-	std::cout << "el founded" << std::endl;
-	//изменения не вступают в силу
 	h1->prev->next = h1->next;
 	h1->next->prev = h1->prev;
-	std::cout << "el edited" << std::endl;
-	//--------------
 }
 
 void outputConsole() {
@@ -58,19 +54,30 @@ void outputConsole() {
 
 void outputFile() {
 	std::string s;
-	std::cout << "Ввелите название файла, в который хотите записать данные:" << std::endl;
+	std::cout << "Ввелите название файла, в который хотите записать данные(с расширением):" << std::endl;
 	std::cin >> s;
 	std::ofstream file(s);
 	if (file.is_open()) {
-
+		Tlist* h1 = head;
+		while(h1 != nullptr){
+			file << h1->t.name << " " << h1->t.electrific << std::endl;
+			h1 = h1->next;
+		}
 	}
 	file.close();
 }
 
-void inputFile(std::string s) {
+void inputFile() {
+	std::cout << "Введите название файла, с которого хотите считать данные(с расширением):" << std::endl;
+	std::string s;
+	std::cin >> s;
 	std::ifstream file(s);
 	if (file.is_open()) {
-		
+		std::string name;
+		int electrific;
+		while(file >> name >> electrific){
+			add(electrific, name);
+		}
 	}
 	else {
 		std::cout << "Файл не был открыт" << std::endl;
@@ -80,21 +87,45 @@ void inputFile(std::string s) {
 
 void inputKeyboard() {
 	std::cout << "Введите название перегона и наименование электрификации(0,1):" << std::endl;
-	std::cout << "Чтобы окончить ввод, введите: Окончить";
-	std::string name, flag;
+	std::cout << "Чтобы окончить ввод, введите в наименовании перегона число -1" << std::endl;
+	std::string name;
 	int elec;
-	while(flag != "Окончить"){
-		std::cin >> name >> elec;
+	while(true){
+		std::cout << "Ввeдите название перегона и наименование электрофикации:" << std::endl;
+		std::cin >> name;
+		std::cin >> elec;
+		if(elec == -1) break;
 		add(elec, name);
 	}
 }
 
+void search(){
+	std::cout << "Введите наименование перегона:" << std::endl;
+	std::string n;
+	std::cin >> n;
+	Tlist* h1 = head;
+	while(h1->t.name != n) h1 = h1->next;
+	std::cout << h1->t.name << " " << h1->t.electrific << std::endl;
+}
+
 int main() {
 	setlocale(0, "Rus");
-	add(1, "Q1-Q2");
-	add(0, "Q2-Q4");
-	add(1, "Q5-Q9");
-	add(1, "Q6-Q7");
-	del(0, "Q2-Q4");
-	outputConsole();
+	// add(1, "Q1-Q2");
+	// add(0, "Q2-Q4");
+	// add(1, "Q5-Q9");
+	// add(1, "Q6-Q7");
+	// add(0, "Q3-Q1");
+	// outputFile();
+	int flag = 0;
+	while (flag != 5){
+		std::cout << "Введите номер команды, которую вы хотите:" << std::endl;
+		std::cout << "1. Ввод\n2. Вывод\n3. Редактирование\n4. Поиск\n5. Выход" << std::endl;
+		std::cin >> flag;
+		if(flag == 1){
+			std::cout << "Осуществить ввод:\n1. С файла\n2. С клавиатуры" << std::endl;
+			std::cin >> flag;
+			if(flag == 1) inputFile();
+			if(flag == 2) inputKeyboard();
+		}
+	}
 }
