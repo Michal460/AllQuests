@@ -2,6 +2,8 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <algorithm>
+#include <vector>
 
 struct Tab {
 	std::string name;
@@ -108,14 +110,33 @@ void search(){
 	std::cout << h1->t.name << " " << h1->t.electrific << std::endl;
 }
 
+bool presort1(Tab& a, Tab& b){
+	return a.name < b.name;
+}
+
+bool presort2(Tab& a, Tab& b){
+	return a.name > b.name;
+}
+
 void sort(){
 	int flag;
-	std::cout << "Сортировка по:\n1. Названию перегона\n2. Числу электрофикации" << std::end;
-	std::cin >> flag;
+	std::cout << "Сортировка по:\n1. Названию перегона\n2. Числу электрофикации" << std::endl;
+	std::vector<Tab> temp;
 	if(flag == 1) {
 		std::cout << "Сортировка по:\n1. от а - до я\n2. от я - до а" << std::endl;
 		std::cin >> flag;
 		if(flag == 1){
+		}
+		if(flag == 2){
+		}
+	}
+	if(flag == 2) {
+		std::cout << "Сортировка по:\n1. По возрастанию\n2. По убыванию" << std::endl;
+		std::cin >> flag;
+		if (flag == 1){
+
+		}
+		if (flag == 2){
 			
 		}
 	}
