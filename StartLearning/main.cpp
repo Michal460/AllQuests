@@ -108,6 +108,15 @@ void search(){
 	std::cout << h1->t.name << " " << h1->t.electrific << std::endl;
 }
 
+void sort(){
+	int flag;
+	std::cout << "Сортировка по:\n1. Названию перегона\n2. Числу электрофикации" << std::end;
+	std::cin >> flag;
+	if(flag == 1) {
+		std::cout << "Сортировка по:\n1. от а - до я\n2. от я - до а" << std::endl;
+	}
+}
+
 int main() {
 	setlocale(0, "Rus");
 	// add(1, "Q1-Q2");
