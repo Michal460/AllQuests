@@ -114,6 +114,10 @@ void sort(){
 	std::cin >> flag;
 	if(flag == 1) {
 		std::cout << "Сортировка по:\n1. от а - до я\n2. от я - до а" << std::endl;
+		std::cin >> flag;
+		if(flag == 1){
+			
+		}
 	}
 }
 
