@@ -38,13 +38,22 @@ void add(int x, std::string s) {
 	}
 }
 
-void del(int x, std::string s) {
+void del(std::string s) {
 	Tlist* h1 = head;
-	while (h1->t.name != s && h1->t.electrific != x) {
+	while (h1->t.name != s) {
 		h1 = h1->next;
 	}
-	h1->prev->next = h1->next;
-	h1->next->prev = h1->prev;
+	if (h1 != head && h1 != last) {
+
+		h1->prev->next = h1->next;
+		h1->next->prev = h1->prev;
+	}
+	if (h1 == head) {
+		head = h1->next;
+	}
+	if (h1 == last) {
+		h1->prev->next = nullptr;
+	}
 }
 
 void outputConsole() {
@@ -53,11 +62,12 @@ void outputConsole() {
 		std::cout << h1->t.name << " " << h1->t.electrific << std::endl;
 		h1 = h1->next;
 	}
+	system("pause");
 }
 
 void outputFile() {
 	std::string s;
-	std::cout << "Ввелите название файла, в который хотите записать данные(с расширением):" << std::endl;
+	std::cout << "Введите название файла, в который хотите записать данные(с расширением):" << std::endl;
 	std::cin >> s;
 	std::ofstream file(s);
 	if (file.is_open()) {
@@ -71,6 +81,8 @@ void outputFile() {
 }
 
 void inputFile() {
+	head = nullptr;
+	last = nullptr;
 	std::cout << "Введите название файла, с которого хотите считать данные(с расширением):" << std::endl;
 	std::string s;
 	std::cin >> s;
@@ -109,6 +121,7 @@ void search() {
 	Tlist* h1 = head;
 	while (h1->t.name != n) h1 = h1->next;
 	std::cout << h1->t.name << " " << h1->t.electrific << std::endl;
+	system("pause");
 }
 
 bool presort1(Tab& a, Tab& b) {
@@ -130,11 +143,15 @@ void sort() {
 		if (flag == 1) {
 			for (Tlist* cur = head; cur != nullptr; cur = cur->next) temp.push_back(cur->t);
 			std::sort(temp.begin(), temp.end(), presort1);
+			head = nullptr;
+			last = nullptr;
 			for (Tab t : temp) add(t.electrific, t.name);
 		}
 		if (flag == 2) {
 			for (Tlist* cur = head; cur != nullptr; cur = cur->next) temp.push_back(cur->t);
 			std::sort(temp.begin(), temp.end(), presort2);
+			head = nullptr;
+			last = nullptr;
 			for (Tab t : temp) add(t.electrific, t.name);
 		}
 	}
@@ -143,11 +160,15 @@ void sort() {
 		std::cin >> flag;
 		if (flag == 1) {
 			for (Tlist* cur = head; cur != nullptr; cur = cur->next) temp.push_back(cur->t);
+			head = nullptr;
+			last = nullptr;
 			for (Tab t : temp) if (t.electrific == 0) add(t.electrific, t.name);
 			for (Tab t : temp) if (t.electrific == 1) add(t.electrific, t.name);
 		}
 		if (flag == 2) {
 			for (Tlist* cur = head; cur != nullptr; cur = cur->next) temp.push_back(cur->t);
+			head = nullptr;
+			last = nullptr;
 			for (Tab t : temp) if (t.electrific == 1) add(t.electrific, t.name);
 			for (Tab t : temp) if (t.electrific == 0) add(t.electrific, t.name);
 		}
@@ -169,12 +190,14 @@ int main() {
 			std::cin >> flag;
 			if (flag == 1) inputFile();
 			if (flag == 2) inputKeyboard();
+			system("cls");
 		}
 		if (flag == 2) {
 			std::cout << "Осуществить вывод:\n1. В файл\n2. В консоль" << std::endl;
 			std::cin >> flag;
 			if (flag == 1) outputFile();
 			if (flag == 2) outputConsole();
+			system("cls");
 		}
 		if (flag == 3) {
 			std::cout << "Осуществить:\n1. Добавление\n2. Удаление\n3. Сортировка" << std::endl;
@@ -185,11 +208,12 @@ int main() {
 				add(x, n);
 			}
 			if (flag == 2) {
-				std::cout << "Введите наименование электрофикации и название перегона:" << std::endl;
-				std::cin >> x >> n;
-				del(x, n);
+				std::cout << "Введите название перегона:" << std::endl;
+				std::cin >> n;
+				del(n);
 			}
 			if (flag == 3) sort();
+			system("cls");
 		}
 		if (flag == 4) search();
 	}
