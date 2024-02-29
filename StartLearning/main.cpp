@@ -19,7 +19,7 @@ struct Tlist {
 Tlist* head = nullptr;
 Tlist* last = nullptr;
 
-void add(int x, std::string s){
+void add(int x, std::string s) {
 	Tlist* el1 = new Tlist;
 	el1->t.name = s;
 	el1->t.electrific = x;
@@ -30,7 +30,8 @@ void add(int x, std::string s){
 		head = el1;
 		last = el1;
 		return;
-	} else {
+	}
+	else {
 		last->next = el1;
 		el1->prev = last;
 		last = el1;
@@ -61,7 +62,7 @@ void outputFile() {
 	std::ofstream file(s);
 	if (file.is_open()) {
 		Tlist* h1 = head;
-		while(h1 != nullptr){
+		while (h1 != nullptr) {
 			file << h1->t.name << " " << h1->t.electrific << std::endl;
 			h1 = h1->next;
 		}
@@ -77,7 +78,7 @@ void inputFile() {
 	if (file.is_open()) {
 		std::string name;
 		int electrific;
-		while(file >> name >> electrific){
+		while (file >> name >> electrific) {
 			add(electrific, name);
 		}
 	}
@@ -92,74 +93,112 @@ void inputKeyboard() {
 	std::cout << "Чтобы окончить ввод, введите в наименовании перегона число -1" << std::endl;
 	std::string name;
 	int elec;
-	while(true){
+	while (true) {
 		std::cout << "Ввeдите название перегона и наименование электрофикации:" << std::endl;
 		std::cin >> name;
 		std::cin >> elec;
-		if(elec == -1) break;
+		if (elec == -1) break;
 		add(elec, name);
 	}
 }
 
-void search(){
+void search() {
 	std::cout << "Введите наименование перегона:" << std::endl;
 	std::string n;
 	std::cin >> n;
 	Tlist* h1 = head;
-	while(h1->t.name != n) h1 = h1->next;
+	while (h1->t.name != n) h1 = h1->next;
 	std::cout << h1->t.name << " " << h1->t.electrific << std::endl;
 }
 
-bool presort1(Tab& a, Tab& b){
+bool presort1(Tab& a, Tab& b) {
 	return a.name < b.name;
 }
 
-bool presort2(Tab& a, Tab& b){
+bool presort2(Tab& a, Tab& b) {
 	return a.name > b.name;
 }
 
-void sort(){
+void sort() {
 	int flag;
 	std::cout << "Сортировка по:\n1. Названию перегона\n2. Числу электрофикации" << std::endl;
+	std::cin >> flag;
 	std::vector<Tab> temp;
-	if(flag == 1) {
+	if (flag == 1) {
 		std::cout << "Сортировка по:\n1. от а - до я\n2. от я - до а" << std::endl;
 		std::cin >> flag;
-		if(flag == 1){
+		if (flag == 1) {
+			for (Tlist* cur = head; cur != nullptr; cur = cur->next) temp.push_back(cur->t);
+			std::sort(temp.begin(), temp.end(), presort1);
+			for (Tab t : temp) add(t.electrific, t.name);
 		}
-		if(flag == 2){
+		if (flag == 2) {
+			for (Tlist* cur = head; cur != nullptr; cur = cur->next) temp.push_back(cur->t);
+			std::sort(temp.begin(), temp.end(), presort2);
+			for (Tab t : temp) add(t.electrific, t.name);
 		}
 	}
-	if(flag == 2) {
+	if (flag == 2) {
 		std::cout << "Сортировка по:\n1. По возрастанию\n2. По убыванию" << std::endl;
 		std::cin >> flag;
-		if (flag == 1){
-
+		if (flag == 1) {
+			for (Tlist* cur = head; cur != nullptr; cur = cur->next) temp.push_back(cur->t);
+			for (Tab t : temp) if (t.electrific == 0) add(t.electrific, t.name);
+			for (Tab t : temp) if (t.electrific == 1) add(t.electrific, t.name);
 		}
-		if (flag == 2){
-			
+		if (flag == 2) {
+			for (Tlist* cur = head; cur != nullptr; cur = cur->next) temp.push_back(cur->t);
+			for (Tab t : temp) if (t.electrific == 1) add(t.electrific, t.name);
+			for (Tab t : temp) if (t.electrific == 0) add(t.electrific, t.name);
 		}
 	}
 }
 
 int main() {
 	setlocale(0, "Rus");
-	// add(1, "Q1-Q2");
-	// add(0, "Q2-Q4");
-	// add(1, "Q5-Q9");
-	// add(1, "Q6-Q7");
-	// add(0, "Q3-Q1");
-	// outputFile();
+	add(1, "Q1-Q2");
+	add(0, "Q2-Q4");
+	add(1, "Q5-Q9");
+	add(1, "Q6-Q7");
+	add(0, "Q3-Q1");
+	outputFile();
+	outputConsole();
 	int flag = 0;
-	while (flag != 5){
+	while (flag != 5) {
 		std::cout << "Введите номер команды, которую вы хотите:" << std::endl;
 		std::cout << "1. Ввод\n2. Вывод\n3. Редактирование\n4. Поиск\n5. Выход" << std::endl;
+		int x;
+		std::string n;
 		std::cin >> flag;
-		if(flag == 1){
+		system("cls");
+		if (flag == 1) {
 			std::cout << "Осуществить ввод:\n1. С файла\n2. С клавиатуры" << std::endl;
 			std::cin >> flag;
-			if(flag == 1) inputFile();
-			if(flag == 2) inputKeyboard();
+			if (flag == 1) inputFile();
+			if (flag == 2) inputKeyboard();
 		}
+		if (flag == 2) {
+			std::cout << "Осуществить вывод:\n1. В файл\n2. В консоль" << std::endl;
+			std::cin >> flag;
+			if (flag == 1) outputFile();
+			if (flag == 2) outputConsole();
+		}
+		if (flag == 3) {
+			std::cout << "Осуществить:\n1. Добавление\n2. Удаление\n3. Сортировка" << std::endl;
+			std::cin >> flag;
+			if (flag == 1) {
+				std::cout << "Введите наименование электрофикации и название перегона:" << std::endl;
+				std::cin >> x >> n;
+				add(x, n);
+			}
+			if (flag == 2) {
+				std::cout << "Введите наименование электрофикации и название перегона:" << std::endl;
+				std::cin >> x >> n;
+				del(x, n);
+			}
+			if (flag == 3) sort();
+		}
+		if (flag == 4) search();
 	}
+	return 0;
 }
