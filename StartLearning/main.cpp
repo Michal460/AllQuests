@@ -156,13 +156,6 @@ void sort() {
 
 int main() {
 	setlocale(0, "Rus");
-	add(1, "Q1-Q2");
-	add(0, "Q2-Q4");
-	add(1, "Q5-Q9");
-	add(1, "Q6-Q7");
-	add(0, "Q3-Q1");
-	outputFile();
-	outputConsole();
 	int flag = 0;
 	while (flag != 5) {
 		std::cout << "Введите номер команды, которую вы хотите:" << std::endl;
