@@ -1,4 +1,5 @@
 //межстанционные - Москва-Пассажирская-Казанская — Раменское
+https://dzen.ru/a/Yw3LED2GARew7Chb
 #include <string>
 #include <iostream>
 #include <fstream>
