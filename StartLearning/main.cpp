@@ -1,17 +1,4 @@
-//межстанционные - Москва-Пассажирская-Казанская — Раменское
-Киевская-Кунцевская 1
-Киевская-Смоленская 1
-Сокольники-Преображенской площадь 1
-Автозаводская-Коломенская 0
-Улица Старокачаловская-Бунинская аллея 0
-Станция_Воробьевы горы 1
-Мякинино-Волоколамская 0
-Молодежная-Славянский бульвар 1
-Волгоградский проспект-Текстильщики 1
-Рязанский проспект-Лермонтовский проспект 1
-Станция_Мичуринский_проспект 1
-Партизанская-Первомайская 0
-Саларьево-Коммунарка 1
+//alt201 alt205 alt186
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -132,9 +119,21 @@ void search() {
 	std::string n;
 	std::cin >> n;
 	Tlist* h1 = head;
-	while (h1->t.name != n) h1 = h1->next;
+	while (h1 != nullptr) {
+		if (h1->t.name == n) {
+			break;
+		}
+		h1 = h1->next;
+	}
+	if (h1 == nullptr) {
+		std::cout << "Данный элемент не найден" << std::endl;
+		system("pause"); 
+		system("cls");
+		return;
+	}
 	std::cout << h1->t.name << " " << h1->t.electrific << std::endl;
 	system("pause");
+	system("cls");
 }
 
 bool presort1(Tab& a, Tab& b) {
@@ -167,6 +166,7 @@ void sort() {
 			last = nullptr;
 			for (Tab t : temp) add(t.electrific, t.name);
 		}
+		return;
 	}
 	if (flag == 2) {
 		std::cout << "Сортировка по:\n1. По возрастанию\n2. По убыванию" << std::endl;
@@ -185,6 +185,7 @@ void sort() {
 			for (Tab t : temp) if (t.electrific == 1) add(t.electrific, t.name);
 			for (Tab t : temp) if (t.electrific == 0) add(t.electrific, t.name);
 		}
+		return;
 	}
 }
 
