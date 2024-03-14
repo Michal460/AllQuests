@@ -233,3 +233,77 @@ int main() {
 	}
 	return 0;
 }
+//alt201 alt205 alt186
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <vector>
+
+class Personal_Data {
+private:
+	std::string surname;
+	std::string name;
+	std::string secname;
+	int data_day;
+	int data_month;
+	int data_year;
+	std::string job_title;
+	int salary;
+public:
+	Personal_Data(std::string srn, std::string n, std::string scn, int dd, int dm, int dy, std::string jb, int s) {
+		surname = srn;
+		name = n;
+		secname = scn;
+		data_day = dd;
+		data_month = dm;
+		data_year = dy;
+		job_title = jb;
+		salary = s;
+	}
+	void input() {
+		std::cout << surname << " " << name << " " << secname << " " << data_day << " " << data_month << " " << data_year << " " << job_title << " " << salary << std::endl;
+	}
+};
+
+class EmpList {
+private:
+	std::vector<Personal_Data> Emp;
+public:
+	void add(Personal_Data Em) {
+		Emp.push_back(Em);
+	}
+	void outputConsole() {
+		for (Personal_Data e : Emp) e.input();
+	}
+	void inputFile() {
+		std::string nameFile;
+		std::cin >> nameFile;
+		std::ifstream file(nameFile);
+		if (file.is_open()) {
+			std::string surname;
+			std::string name;
+			std::string secname;
+			int data_day, data_month, data_year;
+			std::string job_title;
+			int salary;
+			while (file >> surname >> name >> secname >> data_day >> data_month >> data_year >> job_title >> salary) {
+				Emp.push_back(Personal_Data(surname, name, secname, data_day, data_month, data_year, job_title, salary));
+			}
+		}
+		else std::cout << "File didnt open" << std::endl;
+	}
+
+};
+
+int main() {
+	setlocale(0, "rus");
+	EmpList list1;
+	list1.add(Personal_Data("Q1", "q1", "A1", 1, 1, 2005, "S1", 8));
+	list1.add(Personal_Data("Q2", "q2", "A2", 2, 1, 2005, "S2", 8));
+	list1.add(Personal_Data("Q3", "q4", "A3", 3, 1, 2005, "S3", 8));
+	list1.add(Personal_Data("Q4", "q3", "A4", 4, 1, 2005, "S4", 8));
+	list1.inputFile();
+	list1.outputConsole();
+	return 0;
+}
+	std::cout << "═";
