@@ -273,6 +273,8 @@ public:
 		Emp.push_back(Em);
 	}
 	void outputConsole() {
+		std::cout << "╔═════════════════════════════════════════════════════════════════╗" << std::endl;
+		setlocale(0, "rus");
 		for (Personal_Data e : Emp) e.input();
 	}
 	void inputFile() {
@@ -296,14 +298,11 @@ public:
 };
 
 int main() {
-	setlocale(0, "rus");
+	//setConsoleInput();
+	//setConsoleOutput();
 	EmpList list1;
-	list1.add(Personal_Data("Q1", "q1", "A1", 1, 1, 2005, "S1", 8));
-	list1.add(Personal_Data("Q2", "q2", "A2", 2, 1, 2005, "S2", 8));
-	list1.add(Personal_Data("Q3", "q4", "A3", 3, 1, 2005, "S3", 8));
-	list1.add(Personal_Data("Q4", "q3", "A4", 4, 1, 2005, "S4", 8));
 	list1.inputFile();
 	list1.outputConsole();
 	return 0;
+	std::cout << "═ ╣ ║ ╗ ╝ ╚ ╔ ╩ ╦ ╠ ═ ╬ ";
 }
-	std::cout << "═";
