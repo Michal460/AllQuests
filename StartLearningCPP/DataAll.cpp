@@ -25,23 +25,25 @@ void Personal_Data::setSalary(int sal) { salary = sal; }
 Personal_Data::~Personal_Data() {};
 
 void EmpList::addData(Personal_Data& Emp) { data.push_back(Emp); }
-void EmpList::outputConsole(){
-        for(Personal_Data Emp: data){
-			std::string surname, name, secname, job_title;
-			int data_day, data_month, data_year, salary;
-			Emp.getSurname(surname);
-			Emp.getName(name);
-			Emp.getSecname(secname);
-			Emp.getDay(data_day);
-			Emp.getMonth(data_month);
-			Emp.getYear(data_year);
-			Emp.getJobTitle(job_title);
-			Emp.getSalary(salary);
-			std::cout << "║ " << surname << " ║ " << name << " ║ " << secname << " ║ " << data_day << " ║ " << data_month 
-			<< " ║ " << data_month << " ║ " << data_year << " ║ " << job_title << " ║ " << salary << " ║" << std::endl;
-		}
+void EmpList::outputConsole()
+{
+    for(Personal_Data Emp: data){
+		std::string surname, name, secname, job_title;
+		int data_day, data_month, data_year, salary;
+		Emp.getSurname(surname);
+		Emp.getName(name);
+		Emp.getSecname(secname);
+		Emp.getDay(data_day);
+		Emp.getMonth(data_month);
+		Emp.getYear(data_year);
+		Emp.getJobTitle(job_title);
+		Emp.getSalary(salary);
+		std::cout << "║ " << std::setw(15) << std::left << surname << " ║ " << name << std::setw(10) << std::left << " ║ " << secname << " ║ " << data_day << " ║ " << data_month 
+		<< " ║ " << data_month << " ║ " << data_year << " ║ " << job_title << " ║ " << salary << " ║" << std::endl;
+	}
 }
-void EmpList::inputFile(){
+void EmpList::inputFile()
+{
     std::string nameFile;
 	std::cout << "Введите название файла с расширением: " << std::endl;
 	std::cin >> nameFile;
@@ -55,7 +57,8 @@ void EmpList::inputFile(){
 	}
 	else std::cout << "Файл не был открыт" << std::endl;
 }
-void EmpList::outputFile(){
+void EmpList::outputFile()
+{
     std::string nameFile;
 	std::cout << "Введите название файла с расширением: " << std::endl;
 	std::cin >> nameFile;
@@ -77,7 +80,8 @@ void EmpList::outputFile(){
 	}
 	else std::cout << "Файл не был создан для записи данных" << std::endl;
 }
-void EmpList::table(){
+void EmpList::table()
+{
     // std::cout << "═ ╣ ║ ╗ ╝ ╚ ╔  ╦ с ═ ╬ ╠ ";
     std::cout << "╔═══╦═══════════════════════════════════════════════════════════════════════════╦═════════════╦══════════╗" << std::endl;
     std::cout << "║   ║            Личные данные                                                  ║             ║          ║" << std::endl;
@@ -86,6 +90,78 @@ void EmpList::table(){
     std::cout << "║   ║            ║            ║                          ╠═══════╦═══════╦══════╣             ║          ║" << std::endl;
     std::cout << "║   ║            ║            ║                          ║ Число ║ Месяц ║ Год  ║             ║          ║" << std::endl;
     std::cout << "╠═══╬════════════╬════════════╬══════════════════════════╬═══════╬═══════╬══════╬═════════════╬══════════╣" << std::endl;
+}
+void EmpList::deleteData(std::string name)
+{
+	int i = 0;
+	for(i; i < data.size();i++)
+	{
+		std::string tempName;
+		data[i].getName(tempName);
+		if(tempName == name) break;
+	}
+	data.erase(data.begin() + i);
+}
+
+int EmpList::sortAgeD(int day1, int month1, int year1, int day2, int month2, int year2)
+{
+	if(year1 > year2) return 1;
+	if(year1 == year2)
+	{
+		if(month1 > month2) return 1;
+		if(month1 == month2)
+		{
+			if(day1 > day2) return 1;
+		}
+	}
+	return 0;
+}
+
+int EmpList::sortAgeH(int day1, int month1, int year1, int day2, int month2, int year2)
+{
+	if(year1 < year2) return 1;
+	if(year1 == year2)
+	{
+		if(month1 < month2) return 1;
+		if(month1 == month2)
+		{
+			if(day1 < day2) return 1;
+		}
+	}
+	return 0;
+}
+
+void EmpList::sortDataAge(int (*arr) (int, int, int, int, int, int))
+{
+	for(int i = 0; i < data.size() - 1; i++)
+	{	
+		int day1, month1, year1;
+		data[i].getDay(day1);
+		data[i].getMonth(month1);
+		data[i].getYear(year1);
+		int tmpD1 = day1, tmpM1 = month1, tmpY1 = year1;
+		int j_counter;
+		for(int j = i + 1; j < data.size(); j++)
+		{
+			int day2, month2, year2;
+			data[j].getDay(day2);
+			data[j].getMonth(month2);
+			data[j].getYear(year2);
+			if(arr(day1, month1, year1, day2, month2, year2))
+			{
+				day1 = day2;
+				month1 = month2;
+				year1 = year2;
+				j_counter = j;
+			}
+		}
+		if(day1 != tmpD1 && month1 != tmpM1 && year1 != tmpY1)
+		{
+			Personal_Data temp = data[i];
+			data[i] = data[j_counter];
+			data[j_counter] = temp;
+		}
+	}
 }
 
 int main(){
