@@ -5,6 +5,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <iomanip>
 
 class Personal_Data {
 private:
@@ -44,7 +45,9 @@ public:
     void outputFile();
     void inputConsole();
     void deleteData(std::string name);
-    void sortDataAge();
+    void sortDataAge(int (*arr) (int, int, int, int, int, int));
+	int sortAgeH(int day1, int month1, int year1, int day2, int month2, int year2);
+	int sortAgeD(int day1, int month1, int year1, int day2, int month2, int year2);
     void table();
 };
 
