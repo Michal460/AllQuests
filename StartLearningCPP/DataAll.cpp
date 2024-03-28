@@ -178,6 +178,12 @@ int main(){
 	Emp1.getSalary(salary);
 	EmpList L1;
 	L1.table();
+	
+	SetConsoleCP(437);
+	SetConsoleOutputCP(437);
+
+	std::cout << char(205) << char(201) << std::endl;
+	
 	// std::cout << surname << " " << name << " " << secname << " " << data_day 
 	// << " " << data_month << " " << data_year << " " << job_title << " " << salary << std::endl;
 	// std::cout << "Programm is end" << std::endl;
