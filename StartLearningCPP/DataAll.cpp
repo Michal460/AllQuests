@@ -24,7 +24,7 @@ void Personal_Data::setSalary(int sal) { salary = sal; }
 
 Personal_Data::~Personal_Data() {};
 
-void EmpList::addData(Personal_Data& Emp) { data.push_back(Emp); }
+void EmpList::addData(Personal_Data Emp) { data.push_back(Emp); }
 void EmpList::outputConsole()
 {
     for(Personal_Data Emp: data){
@@ -103,90 +103,48 @@ void EmpList::deleteData(std::string name)
 	data.erase(data.begin() + i);
 }
 
-int EmpList::sortAgeD(int day1, int month1, int year1, int day2, int month2, int year2)
+bool EmpList::sortAgeDown(Personal_Data &p1, Personal_Data &p2)
 {
-	if(year1 > year2) return 1;
-	if(year1 == year2)
-	{
-		if(month1 > month2) return 1;
-		if(month1 == month2)
-		{
-			if(day1 > day2) return 1;
-		}
-	}
-	return 0;
+    int year1, year2, month1, month2, day1, day2;
+    p1.getYear(year1);
+    p2.getYear(year2);
+    p1.getMonth(month1);
+    p2.getMonth(month2);
+    p1.getDay(day1);
+    p2.getDay(day2);
+    if(year1 == year2)
+    {
+        return month1 >= month2 ? 0 : 1;
+        if(month1 == month2)
+        {
+            return day1 >= day2 ? 0 : 1;
+        }
+    }
+    return year1 >= year2 ? 0 : 1;
 }
 
-int EmpList::sortAgeH(int day1, int month1, int year1, int day2, int month2, int year2)
-{
-	if(year1 < year2) return 1;
-	if(year1 == year2)
-	{
-		if(month1 < month2) return 1;
-		if(month1 == month2)
-		{
-			if(day1 < day2) return 1;
-		}
-	}
-	return 0;
-}
-
-void EmpList::sortDataAge(int (*arr) (int, int, int, int, int, int))
-{
-	for(int i = 0; i < data.size() - 1; i++)
-	{	
-		int day1, month1, year1;
-		data[i].getDay(day1);
-		data[i].getMonth(month1);
-		data[i].getYear(year1);
-		int tmpD1 = day1, tmpM1 = month1, tmpY1 = year1;
-		int j_counter;
-		for(int j = i + 1; j < data.size(); j++)
-		{
-			int day2, month2, year2;
-			data[j].getDay(day2);
-			data[j].getMonth(month2);
-			data[j].getYear(year2);
-			if(arr(day1, month1, year1, day2, month2, year2))
-			{
-				day1 = day2;
-				month1 = month2;
-				year1 = year2;
-				j_counter = j;
-			}
-		}
-		if(day1 != tmpD1 && month1 != tmpM1 && year1 != tmpY1)
-		{
-			Personal_Data temp = data[i];
-			data[i] = data[j_counter];
-			data[j_counter] = temp;
-		}
-	}
-}
+void EmpList::sortAge(){ std::sort(data.begin(), data.end(), sortAgeDown); }
 
 int main(){
-	Personal_Data Emp1("Q", "q", "a", 1, 1, 2005, "a", 8);
 	std::string surname, name, secname, job_title;
 	int data_day, data_month, data_year, salary;
-	Emp1.getSurname(surname);
-	Emp1.getName(name);
-	Emp1.getSecname(secname);
-	Emp1.getDay(data_day);
-	Emp1.getMonth(data_month);
-	Emp1.getYear(data_year);
-	Emp1.getJobTitle(job_title);
-	Emp1.getSalary(salary);
 	EmpList L1;
-	L1.table();
-	
-	SetConsoleCP(437);
-	SetConsoleOutputCP(437);
+    L1.addData(Personal_Data("Q", "q", "a", 91, 10, 2005, "w", 8000));
+    Personal_Data Emp1("Q1", "q1", "a1", 21, 13, 2005, "a1", 8);
+    Personal_Data Emp2("Q2", "q2", "a2", 65, 34, 213530, "a2", 8);
+    Personal_Data Emp3("Q3", "q3", "a3", 42, 64, 208, "a3", 8);
+    Personal_Data Emp4("Q4", "q4", "a4", 68, 91, 20042, "a4", 8);
+    L1.addData(Emp1);
+    L1.addData(Emp2);
+    L1.addData(Emp3);
+    L1.addData(Emp4);
+
+    L1.sortAge();
+
+    L1.table();
+    L1.outputConsole();
 
 	std::cout << char(205) << char(201) << std::endl;
-	
-	// std::cout << surname << " " << name << " " << secname << " " << data_day 
-	// << " " << data_month << " " << data_year << " " << job_title << " " << salary << std::endl;
-	// std::cout << "Programm is end" << std::endl;
 
 	return 0;
 }
