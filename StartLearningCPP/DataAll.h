@@ -6,6 +6,7 @@
 #include <fstream>
 #include <vector>
 #include <iomanip>
+#include <algorithm>
 
 class Personal_Data {
 private:
@@ -39,15 +40,14 @@ class EmpList{
 private:
     std::vector<Personal_Data> data;
 public:
-    void addData(Personal_Data& Emp);
+    void addData(Personal_Data Emp);
     void outputConsole();
     void inputFile();
     void outputFile();
     void inputConsole();
     void deleteData(std::string name);
-    void sortDataAge(int (*arr) (int, int, int, int, int, int));
-	int sortAgeH(int day1, int month1, int year1, int day2, int month2, int year2);
-	int sortAgeD(int day1, int month1, int year1, int day2, int month2, int year2);
+    void sortAge();
+    static bool sortAgeDown(Personal_Data &p1, Personal_Data &p2);
     void table();
 };
 
