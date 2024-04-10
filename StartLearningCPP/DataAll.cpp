@@ -1,6 +1,6 @@
 // //alt201 alt205 alt186
-//#include "DataAll.h"
-#include "Header2.h"
+#include "DataAll.h"
+//#include "Header2.h"
 
 Personal_Data::Personal_Data(std::string srn, std::string n, std::string scn, int dd, int dm, int dy, std::string jt, int s) : surname(srn),
 name(n), secname(scn), data_day(dd), data_month(dm), data_year(dy), job_title(jt), salary(s) {};
@@ -52,24 +52,29 @@ void EmpList::outputConsole()
 		Emp.getYear(data_year);
 		Emp.getJobTitle(job_title);
 		Emp.getSalary(salary);
-		std::cout << "║ " << count++ << " ║ " << std::setw(10) << std::left << surname << " ║ " << std::setw(10) << std::left << name << " ║ " << std::setw(24) << std::left << secname << " ║ " << std::setw(5)
+		std::cout << "║ " << std::left << std::setw(2) << count++ << " ║ " << std::setw(14) << std::left << surname << " ║ " << std::setw(10) << std::left << name << " ║ " << std::setw(24) << std::left << secname << " ║ " << std::setw(5)
 			<< std::left << data_day << " ║ " << std::setw(5) << std::left << data_month
 			<< " ║ " << std::setw(5) << std::left << data_year << " ║ " << std::setw(11) << std::left << job_title << " ║ " << std::setw(8) << std::left << salary << " ║" << std::endl;
-		std::cout << "╠═══╬════════════╬════════════╬══════════════════════════╬═══════╬═══════╬═══════╬═════════════╬══════════╣" << std::endl;
+
+		std::cout << "╠════╬════════════════╬════════════╬══════════════════════════╬═══════╬═══════╬═══════╬═════════════╬══════════╣" << std::endl;
 	}
 }
+
 void EmpList::inputFile(std::string nameFile)
 {
 	std::ifstream file(nameFile);
 	std::string surname, name, secname, job_title;
 	int data_day, data_month, data_year, salary;
 	if (file.is_open()) {
-		file >> surname >> name >> secname >> data_day >> data_month >> data_year >> job_title >> salary;
-		Personal_Data* Emp = new Personal_Data(surname, name, secname, data_day, data_month, data_year, job_title, salary);
-		addData(*Emp);
+		while(file >> surname >> name >> secname >> data_day >> data_month >> data_year >> job_title >> salary)
+		{
+			Personal_Data* Emp = new Personal_Data(surname, name, secname, data_day, data_month, data_year, job_title, salary);
+			addData(*Emp);
+		}
 	}
 	else std::cout << "Файл не был открыт" << std::endl;
 }
+
 void EmpList::outputFile(std::string nameFile)
 {
 	std::ofstream file(nameFile);
@@ -85,11 +90,13 @@ void EmpList::outputFile(std::string nameFile)
 			Emp.getMonth(data_month);
 			Emp.getYear(data_year);
 			Emp.getSalary(salary);
+			Emp.getJobTitle(job_title);
 			file << surname << " " << name << " " << secname << " " << data_day << " " << data_month << " " << data_year << " " << job_title << " " << salary << std::endl;
 		}
 	}
 	else std::cout << "Файл не был создан для записи данных" << std::endl;
 }
+
 void EmpList::table()
 {
 	// std::cout << "═ ╣ ║ ╗ ╝ ╚ ╔  ╦ с ═ ╬ ╠ ";
@@ -97,24 +104,51 @@ void EmpList::table()
 	//<< std::setfill(char(205)) << std::setw(27) << char(203) << std::setfill(char(205)) << std::setw(20) << std::setfill(char(205)) << std::setw(24) << char(203) << std::setfill(char(205)) << std::setw(14) << char(203)
 	//<< std::setfill(char(205)) << std::setw(11) << char(187) << std::endl;
 	//std::cout << char(201) << std::setfill(char(205)) << std::setw(30) << char(209) << std::endl;
-	std::cout << "╔═══╦════════════════════════════════════════════════════════════════════════════╦═════════════╦══════════╗" << std::endl;
-	std::cout << "║   ║            Личные данные                                                   ║             ║          ║" << std::endl;
-	std::cout << "║   ╠════════════╦════════════╦══════════════════════════╦═══════════════════════╣  Должность  ║ Зарплата ║" << std::endl;
-	std::cout << "║ № ║ Фамилия    ║ Имя        ║ Отчество                 ║  Дата рождения        ║             ║          ║" << std::endl;
-	std::cout << "║   ║            ║            ║                          ╠═══════╦═══════╦═══════╣             ║          ║" << std::endl;
-	std::cout << "║   ║            ║            ║                          ║ Число ║ Месяц ║ Год   ║             ║          ║" << std::endl;
-	std::cout << "╠═══╬════════════╬════════════╬══════════════════════════╬═══════╬═══════╬═══════╬═════════════╬══════════╣" << std::endl;
+	std::cout << "╔════╦════════════════════════════════════════════════════════════════════════════════╦═════════════╦══════════╗" << std::endl;
+	std::cout << "║    ║                Личные данные                                                   ║             ║          ║" << std::endl;
+	std::cout << "║    ╠════════════════╦════════════╦══════════════════════════╦═══════════════════════╣  Должность  ║ Зарплата ║" << std::endl;
+	std::cout << "║ №  ║ Фамилия        ║ Имя        ║ Отчество                 ║  Дата рождения        ║             ║          ║" << std::endl;
+	std::cout << "║    ║                ║            ║                          ╠═══════╦═══════╦═══════╣             ║          ║" << std::endl;
+	std::cout << "║    ║                ║            ║                          ║ Число ║ Месяц ║ Год   ║             ║          ║" << std::endl;
+	std::cout << "╠════╬════════════════╬════════════╬══════════════════════════╬═══════╬═══════╬═══════╬═════════════╬══════════╣" << std::endl;
 }
+
 void EmpList::deleteData(std::string name)
 {
-	int i = 0;
-	for (i; i < data.size(); i++)
+	if(flag == true)
 	{
-		std::string tempName;
-		data[i].getName(tempName);
-		if (tempName == name) break;
+		int i = 0;
+		for (i; i < data.size(); i++)
+		{
+			std::string tempName;
+			data[i].getName(tempName);
+			if (tempName == name) break;
+		}
+		data.erase(data.begin() + i);
+		return;
 	}
-	data.erase(data.begin() + i);
+	std::cout << "У вас нет доступа к удалению" << std::endl;
+}
+
+void EmpList::checkPassword(std::string pass)
+{
+	if(pass == password)
+	{
+		std::cout << "Пароль верен, теперь вы можете редактировать данные" << std::endl;
+		flag = true;
+		return;
+	}
+	std::cout << "Доступ к редактированию запрещён" << std::endl;
+}
+
+void EmpList::UserAddData(Personal_Data Emp)
+{
+	if(flag == true)
+	{
+		addData(Emp);
+		return;
+	}
+	std::cout << "Доступ к редактированию запрещён" << std::endl;
 }
 
 bool EmpList::sortAgeDown(Personal_Data& p1, Personal_Data& p2)
@@ -137,23 +171,43 @@ bool EmpList::sortAgeDown(Personal_Data& p1, Personal_Data& p2)
 	return year1 >= year2 ? 0 : 1;
 }
 
-void EmpList::sortAge() { std::sort(data.begin(), data.end(), sortAgeDown); }
+void EmpList::sortAge() 
+{ 
+	if(flag == true)
+	{
+		std::sort(data.begin(), data.end(), sortAgeDown); 
+		return;
+	}
+	std::cout << "Доступ к редактированию запрещён" << std::endl;
+}
 
 int main() {
+	setlocale(LC_ALL, "");
 	EmpList L1;
 
 	int flag = 0;
-
+    // L1.addData(Personal_Data("Ivanov", "Ivan", "Ivanich", 12, 3, 1985, "Menedjer", 50000));
+	// L1.addData(Personal_Data("Petrova", "Anna", "Sergeevna", 5, 1, 1990, "Analitic", 60000));
+	// L1.addData(Personal_Data("Smirnov", "Pavel", "Vladimirovich", 20, 9, 1982, "Developer", 70000));
+	// L1.addData(Personal_Data("Kozlova", "Elena", "Alecsandrovna", 8, 12, 1988, "Disainer", 55000));
+	// L1.addData(Personal_Data("Mihailov", "Dmitriy", "Ptrovics", 15, 6, 1978, "Buhgalter", 65000));
+    // L1.addData(Personal_Data("Akima", "Sergey", "Sergeevich", 6, 3, 1965, "Diavol", 666666));
+    // L1.addData(Personal_Data("Denisov", "B'ern", "Vizarevich", 19, 2, 1993, "Mainer", 8000));
+    // L1.addData(Personal_Data("Straustrup", "B'ern", "-", 8, 8, 1962, "Jesus", 777777));
+    // L1.addData(Personal_Data("Balakirev", "Sergey", "Kanerevich", 28, 5, 1977, "Prider", 444444));
+    // L1.addData(Personal_Data("Tsal'", "Vitalya", "Papichev", 17, 11, 1989, "Besterst", 0));
+	
 	while (flag != 5)
 	{
+		system("clear");
 		std::cout << "1. Ввод" << std::endl;
 		std::cout << "2. Вывод" << std::endl;
 		std::cout << "3. Редактирование" << std::endl;
 		std::cout << "4. Обработка" << std::endl;
 		std::cout << "5. Выход" << std::endl;
-
 		std::cout << "Введите номер действия:" << std::endl;
 		std::cin >> flag;
+        system("clear");
 		if (flag == 5) continue;
 		if (flag == 1)
 		{
@@ -162,8 +216,10 @@ int main() {
 			std::cout << "2. Файл" << std::endl;
 			std::cout << "Введите номер действия:" << std::endl;
 			std::cin >> flag1;
+            system("clear");
 			if (flag1 == 1)
 			{
+				std::cout << "Введите пароль: ";
 				std::cout << "Введите данные, которые хотите занести в таблицу" << std::endl;
 				L1.inputConsole();
 			}
@@ -182,9 +238,14 @@ int main() {
 			std::cout << "2. Файл" << std::endl;
 			std::cout << "Введите номер действия:" << std::endl;
 			std::cin >> flag1;
+            system("clear");
 			if (flag1 == 1)
 			{
+				char pause;
+                L1.table();
 				L1.outputConsole();
+				std::cout << "Введите любой символ, чтобы продолжить" << std::endl;
+				std::cin >> pause;
 			}
 			if (flag1 == 2)
 			{
@@ -194,22 +255,13 @@ int main() {
 				L1.outputFile(name);
 			}
 		}
+		if (flag == 3)
+		{
+			int flag1 = 0;
+			std::cout << "1. Добавление" << std::endl;
+			std::cout << "2. Удаление" << std::endl; 
+		}
 	}
-
-	std::cout << char(205) << char(201) << std::endl;
-
-	SetConsoleCP(1251);
-	SetConsoleOutputCP(1251);
-
-	L1.addData(Personal_Data("Привет", "q", "a", 91, 10, 2005, "w", 8000));
-	L1.addData(Personal_Data("Q1", "q1", "a1", 21, 13, 2005, "a1", 8));
-	L1.addData(Personal_Data("Q2", "q2", "a2", 65, 34, 21353, "a2", 8));
-	L1.addData(Personal_Data("Q3", "q3", "a3", 42, 64, 208, "a3", 8));
-	L1.addData(Personal_Data("Q4", "q4", "a4", 68, 91, 20042, "a4", 8));
-
-	L1.table();
-
-	L1.outputConsole();
 
 	return 0;
 }
