@@ -7,7 +7,7 @@
 #include <vector>
 #include <iomanip>
 #include <algorithm>
-#include <Windows.h>
+#include <cstring>
 
 class Personal_Data {
 private:
@@ -39,8 +39,12 @@ public:
 
 class EmpList {
 private:
+	bool flag = false;
+	std::string password = "";
 	std::vector<Personal_Data> data;
 public:
+	void UserAddData(Personal_Data Emp);
+	void checkPassword(std::string pass);
 	void addData(Personal_Data Emp);
 	void outputConsole();
 	void inputFile(std::string);
