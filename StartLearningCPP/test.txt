@@ -1,0 +1,10 @@
+Ivanov Ivan Ivanich 12 3 1985 Menedjer 50000
+Petrova Anna Sergeevna 5 1 1990 Analitic 60000
+Smirnov Pavel Vladimirovich 20 9 1982 Developer 70000
+Kozlova Elena Alecsandrovna 8 12 1988 Disainer 55000
+Mihailov Dmitriy Ptrovics 15 6 1978 Buhgalter 65000
+Akima Sergey Sergeevich 6 3 1965 Diavol 666666
+Denisov B'ern Vizarevich 19 2 1993 Mainer 8000
+Straustrup B'ern - 8 8 1962 Jesus 777777
+Balakirev Sergey Kanerevich 28 5 1977 Prider 444444
+Tsal' Vitalya Papichev 17 11 1989 Besterst 0
