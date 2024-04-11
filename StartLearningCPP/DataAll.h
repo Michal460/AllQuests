@@ -8,6 +8,7 @@
 #include <iomanip>
 #include <algorithm>
 #include <cstring>
+#include <Windows.h>
 
 class Personal_Data {
 private:
@@ -40,19 +41,20 @@ public:
 class EmpList {
 private:
 	bool flag = false;
-	std::string password = "";
+	std::string password = "111";
 	std::vector<Personal_Data> data;
 public:
 	void UserAddData(Personal_Data Emp);
-	void checkPassword(std::string pass);
+	bool checkPassword(std::string pass);
 	void addData(Personal_Data Emp);
 	void outputConsole();
 	void inputFile(std::string);
 	void outputFile(std::string);
 	void inputConsole();
 	void deleteData(std::string name);
-	void sortAge();
+	void sortAge(bool (*func_ptr)(Personal_Data&, Personal_Data&));
 	static bool sortAgeDown(Personal_Data& p1, Personal_Data& p2);
+	static bool sortAgeUp(Personal_Data& p1, Personal_Data& p2);
 	void table();
 };
 
