@@ -42,79 +42,86 @@ import json
 #         for link in mas:
 #             file.write(link + '\n')
 # write_hrefs_in_block(all_hrefs)
-# count = 0
-# def write_html_file_data(url, count):
-#     headers = {
-#         "User-Agent" : "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.5993.732 YaBrowser/23.11.1.732 Yowser/2.5 Safari/537.36"
-#     }
-#     req = requests.get(url, headers=headers)
-#
-#     time.sleep(3)
-#
-#     soup = BeautifulSoup(req.text, "lxml")
-#
-#     with open(f"D:/PythonProject/data1/{count}cinema.html", "w", encoding="utf-8") as file:
-#         file.write(soup.prettify())
-#
-#     if check_file_size("D:/PythonProject/data1/", count) < 17*1024:
-#         write_html_file_data(url, count)
-#
-# def check_file_size(file_path, count):
-#     file_path = file_path + f'{count}cinema.html'
-#     file_size = os.path.getsize(file_path)
-#     return file_size
-#
-# with open('D:/PythonProject/hrefs.txt', 'r', encoding='utf-8') as file:
-#     lines = file.readlines()
-#     lines = [line.strip() for line in lines]
-#
-#
-# for href in lines:
-#     write_html_file_data(href, count)
-#     count+=1
+count = 0
+def write_html_file_data(url, count):
+    headers = {
+        "User-Agent" : "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.140 Safari/537.36"
+    }
+    req = requests.get(url, headers=headers)
 
-def read_all_hrefs():
-    for name in range(292):
-        with open(f"D:/PythonProject/data1/{name}cinema.html", encoding="utf-8") as file:
-            src = file.read()
-        dict_all_char={}
-        soup = BeautifulSoup(src, "lxml")
-        title_name = soup.find("div", class_="event-concert-description__title-info")
-        title_afisha = soup.find("div", class_="event-concert-description__argument yandex-sans")
-        about_name = soup.find("div", class_="concert-description__text-wrap")
-        all_charact = soup.find_all("div", class_="event-attributes__row")
-        poster = soup.find("div", class_="image event-concert-heading__poster")
-        all_img = soup.find_all("img", class_="image event-concert-gallery__image")
-        all_img = [item.get("src") for item in all_img]
-        if title_name != None:
-            dict_all_char["Название"] = " ".join(title_name.text.split())
-        else:
-            dict_all_char["Название"] = "None inf"
-        if title_afisha != None:
-            dict_all_char["Описание"] = " ".join(title_afisha.text.split())
-        else:
-            dict_all_char["Описание"] = "None inf"
-        if about_name != None:
-            dict_all_char["О фильме"] = " ".join(about_name.text.split())
-        else:
-            dict_all_char["О фильме"] = "None inf"
-        if poster != None:
-            dict_all_char["Постер"] = poster.get(src)
-        else:
-            dict_all_char["Постер"] = "None inf"
-        if all_img != None:
-            dict_all_char["Изображения"] = all_img
-        else:
-            dict_all_char["Изображения"] = "None inf"
-        for item in all_charact:
-            name_item = " ".join(item.find("dt", class_="event-attributes__category").text.split())
-            charact_item = " ".join(item.find("dd", class_="event-attributes__category-value").text.split())
-            dict_all_char[name_item] = charact_item
-        print(dict_all_char)
-        with open(f"D:/PythonProject/data1j/{name}cinema.json", "w", encoding="utf-8") as file:
-            json.dump(dict_all_char, file, indent=4, ensure_ascii=False)
+    time.sleep(5)
 
-read_all_hrefs()
+    soup = BeautifulSoup(req.text, "lxml")
+
+    with open(f"/home/michael/PycharmProjects/pythonProject/data3/{count}theatre.html", "w", encoding="utf-8") as file:
+        file.write(soup.prettify())
+
+    if check_file_size("/home/michael/PycharmProjects/pythonProject/data3/", count) < 17*1024:
+        write_html_file_data(url, count)
+        print(f"{count} captcha")
+
+def check_file_size(file_path, count):
+    file_path = file_path + f'{count}theatre.html'
+    file_size = os.path.getsize(file_path)
+    return file_size
+
+with open('/home/michael/PycharmProjects/pythonProject/hrefs1.txt', 'r', encoding='utf-8') as file:
+    lines = file.readlines()
+    lines = [line.strip() for line in lines]
+
+
+for href in lines:
+    write_html_file_data(href, count)
+    count+=1
+    print(f"{count} file is writed")
+
+# def read_all_cinema():
+#     for name in range(292):
+#         with open(f"/home/michael/PycharmProjects/pythonProject/data1/{name}cinema.html", encoding="utf-8") as file:
+#             src = file.read()
+#         dict_all_char={}
+#         soup = BeautifulSoup(src, "lxml")
+#         title_name = soup.find("div", class_="event-concert-description__title-info")
+#         title_afisha = soup.find("div", class_="event-concert-description__argument yandex-sans")
+#         about_name = soup.find("div", class_="concert-description__text-wrap")
+#         all_charact = soup.find_all("div", class_="event-attributes__row")
+#         poster = soup.find("img", class_="image event-concert-heading__poster")
+#         all_img = soup.find_all("img", class_="image event-concert-gallery__image")
+#         all_img = [item.get("style").strip('background-image: url(').rstrip(')') for item in all_img]
+#         backprekol = soup.find("div", class_="promo-media-background")
+#         if title_name != None:
+#             dict_all_char["Название"] = " ".join(title_name.text.split())
+#         else:
+#             dict_all_char["Название"] = "None inf"
+#         if title_afisha != None:
+#             dict_all_char["Описание"] = " ".join(title_afisha.text.split())
+#         else:
+#             dict_all_char["Описание"] = "None inf"
+#         if about_name != None:
+#             dict_all_char["О фильме"] = " ".join(about_name.text.split())
+#         else:
+#             dict_all_char["О фильме"] = "None inf"
+#         if poster != None:
+#             dict_all_char["Постер"] = poster["src"]
+#         else:
+#             dict_all_char["Постер"] = "None inf"
+#         if all_img != None:
+#             dict_all_char["Изображения"] = all_img
+#         else:
+#             dict_all_char["Изображения"] = "None inf"
+#         if backprekol != None and isinstance(backprekol, str):
+#             dict_all_char["Задний фон"] = backprekol.get("style").strip('background-image: url(').rstrip(');')
+#         else:
+#             dict_all_char["Задний фон"] = "None inf"
+#         for item in all_charact:
+#             name_item = " ".join(item.find("dt", class_="event-attributes__category").text.split())
+#             charact_item = " ".join(item.find("dd", class_="event-attributes__category-value").text.split())
+#             dict_all_char[name_item] = charact_item
+#         print(dict_all_char)
+#         with open(f"/home/michael/PycharmProjects/pythonProject/data1j/{name}cinema.json", "w", encoding="utf-8") as file:
+#             json.dump(dict_all_char, file, indent=4, ensure_ascii=False)
+# 
+# read_all_cinema()
 
 # def write_event():
 #     for item in range(1):
