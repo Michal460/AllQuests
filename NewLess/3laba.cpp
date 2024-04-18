@@ -1,6 +1,7 @@
 #include <iostream>
 #include <math.h>
 #include <string>
+#include <Windows.h>
 
 #define PI 3.1415
 
@@ -32,16 +33,25 @@ public:
         return "не треугольник";
     }
 
-    bool operator>=(TTriangle& obj) { this->Perimetr() >= obj.Perimetr() ? 1 : 0; }
-    bool operator<=(TTriangle& obj) { this->Perimetr() <= obj.Perimetr() ? 1 : 0; }
+    std::string operator==(TTriangle& obj) { if (this->Perimetr() == obj.Perimetr()) return "Треугольники равны"; else return "Треугольники не равны"; }
+    std::string operator!=(TTriangle& obj) { if (this->Perimetr() != obj.Perimetr()) return "Треугольники не равны"; else return "Треугольники равны"; }
+    std::string operator>(TTriangle& obj) { if (this->Perimetr() > obj.Perimetr()) return "Треугольник 1 больше 2"; else return "Треугольник 2 больше 1"; }
+    std::string operator<(TTriangle& obj) { if (this->Perimetr() < obj.Perimetr()) return "Треугольник 2 больше 1"; else return "Треугольник 1 больше 2"; }
 
     ~TTriangle() {}
 };
 
 int main(void)
 {
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
     TTriangle* tr1 = new TTriangle(3, 3, 3);
     TTriangle tr2{ *tr1 };
+    TTriangle* tr3 = new TTriangle(3, 5, 7);
+
+    std::string res = *tr1 == *tr3;
+
+    std::cout << res << std::endl;
 
     std::cout << tr1->AngleC() << std::endl;
     std::cout << tr1->TType() << std::endl;
@@ -53,7 +63,12 @@ int main(void)
     std::cout << tr2.Area() << std::endl;
     std::cout << tr2.Perimetr() << std::endl;
 
-    delete tr1;
+    std::cout << tr3->AngleC() << std::endl;
+    std::cout << tr3->TType() << std::endl;
+    std::cout << tr3->Area() << std::endl;
+    std::cout << tr3->Perimetr() << std::endl;
+
+    delete tr1, tr3;
 
     return 0;
 }
