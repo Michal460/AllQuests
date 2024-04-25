@@ -20,11 +20,11 @@ class String : public Fraction {
 	int len;
 public:
 	String(int lo, char sing, int len) : Fraction(lo, sing), len(len) {}
-	void func1(double num, char* mas) 
+	void func1(double num, char* mas)
 	{
 		double ost = (num - (int)num) * pow(10, lenOst);
 		get_values(lenOst, sing);
-		sprintf(mas, "%c%.2f", sing, num);
+		sprintf(mas, "%c%.4f", sing, num);
 	}
 	void get_mas(char* m) { m = mas; }
 	void get_len(int& l) { l = len; }
@@ -34,7 +34,7 @@ int main() {
 	String* n1 = new String(3, '-', 15);
 	char* mas = new char[255];
 	int len;
-	n1->func1(2.0 / 3.0, mas);
+	n1->func1(5.0 / 3.0, mas);
 	n1->get_len(len);
 	puts(mas);
 }
