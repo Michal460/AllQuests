@@ -282,10 +282,11 @@ public:
 
 int main(void)
 {
-	std::cout.setf(std::ios::showpoint);
-	std::cout.setf(std::ios::showpos);
-	std::cout << 1.123456;
+	std::cout.width(5);//задает длину выводимого сообщения, остатки заполняет заменителем(пробел)
+	std::cout.precision(1);//задает число чисел после точки, остатки заполняет заменителем(пробел)
+	std::cout.fill('-');//изменяет заменитель
 
+	std::cout << 2.0/3.0;
 	// Line* obj1 = new Line(1, 2, 10, 20);
 	// Line::delete_object(obj1);
 
