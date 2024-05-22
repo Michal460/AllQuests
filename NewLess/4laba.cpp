@@ -1,84 +1,154 @@
-#include <iostream>
+#include "MyPractice2.h"
+#include <sstream>
 
-class TMyMatrix {
-private:
-    int total, count;
-    int* matrix;
+matrix::matrix(int i, int j) { if(i>0) this->i = i; if(j>0) this->j = j; arr = new int[i*j]; }
+matrix::matrix(const matrix& obj) : matrix(obj.i, obj.j) { for(int h = 0; h < obj.i*obj.j; h++) arr[h] = obj.arr[h]; }
+matrix::matrix(matrix&& obj) noexcept : matrix(obj.i, obj.j) { arr = obj.arr; obj.arr = nullptr; }
+matrix::~matrix(){ delete [] arr; }
 
-public:
-    TMyMatrix(int t, int c) : total(t), count(c) { matrix = new int[total * count] {0}; }
-    TMyMatrix(int* m, int t, int c) : TMyMatrix(t, c) { set_coords(m, total, count); }
-    TMyMatrix(const TMyMatrix& other) : TMyMatrix(other.matrix, other.total, other.count) {}
-
-    void set_coords(int* m, int len, int con) { for (int i = 0; i < total * con; i++) matrix[i] = (i < len * con) ? m[i] : 0; }
-
-    int* get_coords() { return matrix; }
-    void totalM(int& t) { t = total; }
-    void countM(int& c) { c = count; }
-
-    TMyMatrix operator+=(const TMyMatrix& other) { for (int i = 0; i < other.total * other.count; i++) matrix[i] += other.matrix[i]; }
-    TMyMatrix operator-=(const TMyMatrix& other) { for (int i = 0; i < other.total * other.count; i++) matrix[i] -= other.matrix[i]; }
-    TMyMatrix operator*=(const int& num) { for (int i = 0; i < total * count; i++) matrix[i] *= num; }
-    TMyMatrix operator/=(const int& num) { for (int i = 0; i < total * count; i++) matrix[i] /= num; }
-    bool operator==(const TMyMatrix& other) { for (int i = 0; i < other.total * other.count; i++) if (matrix[i] != other.matrix[i]) return 0; return 1; }
-    bool operator!=(const TMyMatrix& other) { for (int i = 0; i < other.total * other.count; i++) if (matrix[i] == other.matrix[i]) return 0; return 1; }
-
-    TMyMatrix operator/(const int num);
-    TMyMatrix operator+(const TMyMatrix& other);
-    TMyMatrix operator-(const TMyMatrix& other);
-    TMyMatrix operator*(const TMyMatrix& other);
-
-    ~TMyMatrix() {}
-};
-
-TMyMatrix TMyMatrix::operator/(const int num) {
-    if (num == 0) return TMyMatrix(this->total, this->count);
-    for (int i = 0; i < total * count; i++) matrix[i] = matrix[i] / num;
-    return *this;
-}
-
-TMyMatrix TMyMatrix::operator+(const TMyMatrix& other) {
-    if (other.total != total || other.count != count) return TMyMatrix(this->total, this->count);
-    TMyMatrix res(total, count);
-    for (int i = 0; i < other.total * other.count; i++) res.matrix[i] = matrix[i] + other.matrix[i];
-    return *this;
-}
-
-TMyMatrix TMyMatrix::operator-(const TMyMatrix& other) {
-    if (other.total != total || other.count != count) return TMyMatrix(this->total, this->count);
-    TMyMatrix res(total, count);
-    for (int i = 0; i < other.total * other.count; i++) res.matrix[i] = matrix[i] - other.matrix[i];
-    return res;
-}
-
-TMyMatrix TMyMatrix::operator*(const TMyMatrix& other)
+ostream& operator<<(ostream &stream, const matrix& obj)
 {
-    if (other.total != count) return TMyMatrix(this->total, this->count);
-    TMyMatrix res(total, other.count);
-    for (int i = 0; i < total; i++) {
-        for (int j = 0; j < other.count; j++) {
-            for (int k = 0; k < other.total; k++) {
-                res.matrix[total * i + j] += (matrix[total * i + k] * other.matrix[total * k + j]);
+    for(int h1 = 0; h1 < obj.i; h1++)
+    {
+        for(int h2 = 0; h2 < obj.j; h2++)
+        {
+            stream << obj.arr[h1*obj.i+h2] << " ";
+        }
+        stream << endl;
+    }
+    return stream;
+}
+
+istream& operator>>(istream &stream, matrix& obj)
+{
+    for(int h = 0; h < obj.i*obj.j; h++) stream >> obj.arr[h];
+    return stream;
+}
+
+string matrix::toString() const
+{
+    stringstream ss;
+    for(int h1 = 0; h1 < i; h1++)
+    {
+        for(int h2 = 0; h2 < j; h2++)
+        {
+            ss << arr[h1*j + h2] << ' ';
+        }
+        ss << '\n';
+    }
+    return ss.str();
+}
+
+void matrix::set_i_j(const int& i, const int& j)
+{
+    this->i = i;
+    this->j = j;
+    this->arr = nullptr;
+    this->arr = new int[this->i*this->j]; 
+}
+
+void matrix::fromString(const string& str)
+{
+    stringstream ss(str);
+    for(int h1 = 0; h1 < i; h1++)
+    {
+        for(int h2 = 0; h2 < j; h2++)
+        {
+            ss >> arr[h1*j + h2];
+        }
+    }
+}
+
+matrix matrix::operator+(const matrix& obj)
+{
+    if(this->i != obj.i || this->j != obj.j) throw invalid_argument("Error: matrix1 row and width not equal matrix2 row and width");
+
+    matrix newobj(obj.i, obj.j);
+    for(int h = 0; h < obj.i*obj.j; h++) newobj.arr[h] = this->arr[h] + obj.arr[h];
+    return newobj;
+}
+
+matrix matrix::operator-(const matrix& obj)
+{
+    if(this->i != obj.i || this->j != obj.j) throw invalid_argument("Error: matrix1 row and width not equal matrix2 row and width");
+
+    matrix newobj(obj.i, obj.j);
+    for(int h = 0; h < obj.i*obj.j; h++) newobj.arr[h] = this->arr[h] - obj.arr[h];
+    return newobj;
+}
+
+bool matrix::operator==(const matrix& obj)
+{
+    if(this->i == obj.i && this->j == obj.j)
+    { for(int h = 0; h < obj.i*obj.j; h++) if(this->arr[h] != obj.arr[h]) return 0; return 1;}
+    return 0;
+}
+
+bool matrix::operator!=(const matrix& obj)
+{
+    if(this->i == obj.i && this->j == obj.j)
+    { for(int h = 0; h < obj.i*obj.j; h++) if(this->arr[h] != obj.arr[h]) return 1; return 0;}
+    return 1;
+}
+
+matrix matrix::operator/(const int& num)
+{
+    matrix newobj(this->i, this->j);
+    for(int h = 0; h < this->i*this->j; h++) newobj.arr[h] = this->arr[h] / num;
+    return newobj;
+}
+
+matrix matrix::operator*(const matrix& obj)
+{
+    if(this->j != obj.i) throw invalid_argument("Width not equal row");
+    matrix newobj(this->i, obj.j);
+    for(int h = 0; h < this->i; h++)
+    {
+        for(int g = 0; g < obj.j; g++)
+        {
+            for(int k = 0; k < obj.i; k++)
+            {
+                newobj.arr[this->i*h + g] += (this->arr[this->i*h + k] * obj.arr[this->i*k + g]);
             }
         }
     }
-    return res;
+    return newobj;
 }
 
-int main(void)
+matrix& matrix::operator+=(const matrix& obj)
 {
-    int ar1[] = { 1, 2, 3, 6, 5, 4, 7, 8, 9 };
-    int ar2[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-    TMyMatrix* matrix1 = new TMyMatrix(ar1, 3, 3);
-    TMyMatrix* matrix2 = new TMyMatrix(ar2, 3, 3);
-    //(*matrix1)+=(*matrix2);
-
-    TMyMatrix res = *matrix1 * *matrix2;
-
-    int* ares = res.get_coords();
-
-    for (int i = 0; i < 9; i++) std::cout << ares[i] << " ";
-
-    return 0;
+    for(int h = 0; h < obj.i*obj.j; h++) this->arr[h] += obj.arr[h];
+    return *this;
 }
+
+matrix& matrix::operator-=(const matrix& obj)
+{
+
+    for(int h = 0; h < obj.i*obj.j; h++) this->arr[h] -= obj.arr[h];
+    return *this;
+}
+
+matrix& matrix::operator=(matrix& obj)
+{
+    this->i = obj.i;
+    this->j = obj.j;
+    this->arr = nullptr;
+    this->arr = new int[i*j];
+    for(int h = 0; h < obj.i*obj.j; h++) this->arr[h] = obj.arr[h];
+    return *this;
+}
+
+// int main(void)
+// {
+//     matrix obj1(2, 2);
+//     cin >> obj1;
+//     matrix obj2(2, 2);
+//     cin >> obj2;
+//     // matrix obj3(3, 3);
+//     // cin >> obj3;
+
+//     matrix ob = obj1 * obj2;
+//     cout << ob;
+//     return 0;
+// }
