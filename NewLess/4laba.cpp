@@ -98,22 +98,23 @@ matrix matrix::operator/(const int& num)
     return newobj;
 }
 
-matrix matrix::operator*(const matrix& obj)
+matrix matrix::operator*(const matrix& obj) 
 {
-    if(this->j != obj.i) throw invalid_argument("Width not equal row");
+    if (this->j != obj.i) 
+        throw invalid_argument("Width of first matrix must be equal to height of second matrix");
+
     matrix newobj(this->i, obj.j);
-    for(int h = 0; h < this->i; h++)
-    {
-        for(int g = 0; g < obj.j; g++)
-        {
-            for(int k = 0; k < obj.i; k++)
-            {
-                newobj.arr[this->i*h + g] += (this->arr[this->i*h + k] * obj.arr[this->i*k + g]);
+    for(int i = 0; i < this->i*obj.j; i++) newobj.arr[i] = 0;
+    for (int h = 0; h < this->i; h++) {
+        for (int g = 0; g < obj.j; g++) {
+            for (int k = 0; k < this->j; k++) {
+                newobj.arr[obj.j * h + g] += (this->arr[this->j * h + k] * obj.arr[obj.j * k + g]);
             }
         }
     }
     return newobj;
 }
+
 
 matrix& matrix::operator+=(const matrix& obj)
 {
