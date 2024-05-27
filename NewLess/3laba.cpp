@@ -1,74 +1,57 @@
 #include <iostream>
-#include <math.h>
-#include <string>
-#include <Windows.h>
+#include <iomanip>
 
-#define PI 3.1415
-
-class TTriangle
-{
-private:
-    int lengths[3];
-
+class Triad{
+protected:
+    int x1, x2, x3;
 public:
-    TTriangle() {}
-    TTriangle(int a = 0, int b = 0, int c = 0) { lengths[0] = a; lengths[1] = b; lengths[2] = c; }
-    TTriangle(const TTriangle& other) { lengths[0] = other.lengths[0]; lengths[1] = other.lengths[1]; lengths[2] = other.lengths[2]; }
+    Triad(int x1, int x2, int x3) : x1(x1), x2(x2), x3(x3) {}
 
-    int Perimetr() { return lengths[0] + lengths[1] + lengths[2]; }
-
-    double Area() { double p = Perimetr() / 2.0; return sqrt(p * (p - lengths[0]) * (p - lengths[1]) * (p - lengths[2])); }
-
-    double AngleA() { return (180 / PI) * acos((double)(lengths[1] * lengths[1] + lengths[2] * lengths[2] - lengths[0] * lengths[0]) / (double)(2 * lengths[1] * lengths[2])); }
-    double AngleB() { return (180 / PI) * acos((double)(lengths[0] * lengths[0] + lengths[2] * lengths[2] - lengths[1] * lengths[1]) / (double)(2 * lengths[0] * lengths[2])); }
-    double AngleC() { return (180 / PI) * acos((double)(lengths[0] * lengths[0] + lengths[1] * lengths[1] - lengths[2] * lengths[2]) / (double)(2 * lengths[1] * lengths[0])); }
-
-    std::string TType()
-    {
-        if (lengths[0] == lengths[1] && lengths[0] == lengths[2]) return "равносторонний";
-        if (lengths[0] == lengths[1] && lengths[0] != lengths[2] || lengths[0] == lengths[2] && lengths[0] != lengths[1] || lengths[1] == lengths[2] && lengths[1] != lengths[0])
-            return "равнобедренный";
-        if (round(AngleA()) == 90 || round(AngleB()) == 90 || round(AngleC()) == 90) return "прямоугольный";
-        if (lengths[0] + lengths[1] > lengths[2] && lengths[0] + lengths[2] > lengths[1] && lengths[1] + lengths[2] > lengths[0]) return "общего вида";
-        return "не треугольник";
-    }
-
-    std::string operator==(TTriangle& obj) { if (this->Perimetr() == obj.Perimetr()) return "Треугольники равны"; else return "Треугольники не равны"; }
-    std::string operator!=(TTriangle& obj) { if (this->Perimetr() != obj.Perimetr()) return "Треугольники не равны"; else return "Треугольники равны"; }
-    std::string operator>(TTriangle& obj) { if (this->Perimetr() > obj.Perimetr()) return "Треугольник 1 больше 2"; else return "Треугольник 2 больше 1"; }
-    std::string operator<(TTriangle& obj) { if (this->Perimetr() < obj.Perimetr()) return "Треугольник 2 больше 1"; else return "Треугольник 1 больше 2"; }
-
-    ~TTriangle() {}
+    virtual void up_x1(){ x1++; }
+    virtual void up_x2(){ x2++; }
+    virtual void up_x3(){ x3++; }
 };
 
-int main(void)
+class Time: public Triad{
+public:
+    Time(int hours, int minutes, int seconds) : Triad(hours, minutes, seconds) {}
+
+    virtual void up_x1() override { x1 == 23 ? x1 = 0 : x1++; }
+    virtual void up_x2() override { if(x2 == 59) { x2 = 0; up_x1(); } else x2++; }
+    virtual void up_x3() override { if(x3 == 59) { x3 = 0; up_x2(); } else x3++; }
+
+    void set_time(int& h, int& m, int& s){ x1 = h; x2 = m; x3 = s; }
+    void get_time(int& h, int& m, int& s){ h = x1; m = x2; s = x3; }
+
+    friend std::istream& operator>>(std::istream& stream, Time& obj);
+    friend std::ostream& operator<<(std::ostream& stream, Time& obj);
+};
+
+std::istream& operator>>(std::istream& stream, Time& obj)
 {
-    SetConsoleCP(1251);
-    SetConsoleOutputCP(1251);
-    TTriangle* tr1 = new TTriangle(3, 3, 3);
-    TTriangle tr2{ *tr1 };
-    TTriangle* tr3 = new TTriangle(3, 5, 7);
+    int h, m, s;
+    stream >> h >> m >> s;
+    obj.set_time(h, m, s);
+    return stream;
+}
 
-    std::string res = *tr1 == *tr3;
+std::ostream& operator<<(std::ostream& stream, Time& obj)
+{
+    int h, m, s;
+    obj.get_time(h, m, s);
+    stream << std::setw(2) << std::setfill('0') << h << ":" << std::setw(2) << std::setfill('0') << m << ":" << std::setw(2) << std::setfill('0') << s << std::endl;
+    return stream;
+}
 
-    std::cout << res << std::endl;
+int main(void){
+    int hours, minutes, seconds;
+    Time* t1 = new Time(1, 17, 59);
+    t1->up_x3();
+    t1->up_x2();
+    t1->up_x1();
+    t1->get_time(hours, minutes, seconds);
 
-    std::cout << tr1->AngleC() << std::endl;
-    std::cout << tr1->TType() << std::endl;
-    std::cout << tr1->Area() << std::endl;
-    std::cout << tr1->Perimetr() << std::endl;
+    std::cout << *t1;
 
-    std::cout << tr2.AngleC() << std::endl;
-    std::cout << tr2.TType() << std::endl;
-    std::cout << tr2.Area() << std::endl;
-    std::cout << tr2.Perimetr() << std::endl;
-
-    std::cout << tr3->AngleC() << std::endl;
-    std::cout << tr3->TType() << std::endl;
-    std::cout << tr3->Area() << std::endl;
-    std::cout << tr3->Perimetr() << std::endl;
-
-    delete tr1, tr3;
-
-    return 0;
+    //printf("%.2d:%.2d:%.2d", hours, minutes, seconds);
 }
