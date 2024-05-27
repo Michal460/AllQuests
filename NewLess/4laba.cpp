@@ -7,6 +7,7 @@ class matrix{
 
 public:
     explicit matrix(int i = 1, int j = 1) { if(i>0) this->i = i; if(j>0) this->j = j; arr = new int[i*j]; }
+    matrix(int* m) { if(sizeof(m) == 4*i*j) for(int i = 0; i < i*j; i++) arr[i] = m[i]; }
     matrix(const matrix& obj) : matrix(obj.i, obj.j) { for(int h = 0; h < obj.i*obj.j; h++) arr[h] = obj.arr[h]; }
     matrix(matrix&& obj) noexcept : matrix(obj.i, obj.j) { arr = obj.arr; obj.arr = nullptr; }
     ~matrix() {delete [] arr; }
@@ -89,7 +90,7 @@ std::istream& operator>>(std::istream &stream, matrix& obj)
 
 int main(){
     matrix* obj1 = new matrix(2, 2);
-    matrix* obj2 = new matrix(2, 2);
+    matrix* obj2 = new matrix(3, 1);
     std::cin >> *obj1 >> *obj2;
     matrix obj = (*obj1)*(*obj2);
     std::cout << obj;
