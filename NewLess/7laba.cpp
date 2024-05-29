@@ -1,6 +1,6 @@
 //z = x+i*y
 #include <iostream>
-#include <math.h>
+#include <cmath>
 #include <stdexcept>
 #include <string>
 
@@ -17,29 +17,29 @@ class ZeroDivisionError : public std::exception{
 public:
     ZeroDivisionError(const char* err) : msg(err) {}
     ZeroDivisionError(const ZeroDivisionError& obj) : msg(obj.msg) {}
-    ~ZeroDivisionError() {}
+    ~ZeroDivisionError() noexcept override {}
 
-    const char* what() noexcept { return msg.c_str(); }
+    const char* what() const noexcept override { return msg.c_str(); }
 };
-
 
 zTrig transform(zArg& obj) {
     zTrig newobj;
-    newobj.radius = sqrt(obj.a*obj.a + obj.b*obj.b);
+    newobj.radius = std::sqrt(obj.a*obj.a + obj.b*obj.b);
     if(obj.a == 0) throw ZeroDivisionError("You cannot div on zero!");
-    newobj.angle = asin(obj.b/obj.a);
+    newobj.angle = std::asin(obj.b/obj.a);
     return newobj;
 }
 
 int main()
 {
-    zArg obj{0.0, 3.0};
+    zArg obj{0.0, 1.0};
     zTrig nObj;
     try{
         nObj = transform(obj);
     }
     catch(ZeroDivisionError& obj){
         std::cout << obj.what() << std::endl;
+        return 1;
     }
 
     std::cout << nObj.radius << " " << nObj.angle;
